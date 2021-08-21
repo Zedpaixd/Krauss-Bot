@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Krauss Bot", "Krauss Bot.pyproj", "{8FE3D71E-E1B7-4D80-8237-E141C38F614A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8FE3D71E-E1B7-4D80-8237-E141C38F614A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FE3D71E-E1B7-4D80-8237-E141C38F614A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1AEDEB67-BB86-44EC-827C-E445967B1EDA}
+	EndGlobalSection
+EndGlobal
