@@ -18,6 +18,8 @@ class music_cog(commands.Cog):
         self.YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True'}
         self.FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
+        self.np = ""
+
         self.vc = ""
 
      #searching the item on youtube
@@ -45,7 +47,7 @@ class music_cog(commands.Cog):
             self.is_playing = False
 
     # infinite loop checking 
-    async def play_music(self):
+    async def play_music(self, ctx):
         if len(self.music_queue) > 0:
             self.is_playing = True
 
@@ -59,6 +61,10 @@ class music_cog(commands.Cog):
                 await self.vc.move_to(self.music_queue[0][1])
             
             print(self.music_queue)
+
+            self.np = self.music_queue[0][0]['title']
+
+            await ctx.send("Now playing: {}".format(self.np))
             #remove the first element as you are currently playing it
             self.music_queue.pop(0)
 
@@ -79,17 +85,16 @@ class music_cog(commands.Cog):
             if type(song) == type(True):
                 await ctx.send("Could not download the song. Incorrect format try another keyword. This could be due to playlist or a livestream format.")
             else:
-                await ctx.send("Song added to the queue")
                 self.music_queue.append([song, voice_channel])
                 
                 if self.is_playing == False:
-                    await self.play_music()
+                    await self.play_music(ctx)
 
     @commands.command(name="queue", help="Displays the current songs in queue")
     async def q(self, ctx):
         retval = ""
         for i in range(0, len(self.music_queue)):
-            retval += self.music_queue[i][0]['title'] + "\n"
+            retval += str(i+1) + ". " + self.music_queue[i][0]['title'] + "\n"
 
         print(retval)
         if retval != "":
@@ -97,9 +102,23 @@ class music_cog(commands.Cog):
         else:
             await ctx.send("No music in queue")
 
-    @commands.command(name="skip", help="Skips the current song being played")
+    @commands.command(name="iAmReallyFuckingGay", help="Skips the current song being played")
     async def skip(self, ctx):
         if self.vc != "" and self.vc:
             self.vc.stop()
             #try to play next in the queue if it exists
-            await self.play_music()
+            try:
+                await self.play_music(ctx)
+                await ctx.send("We all know, don't worry.")
+            except:
+                pass
+
+    @commands.command(name="pause", help="Pauses the current song being played")
+    async def pause(self,ctx):
+        if self.vc != "" and self.vc:
+            self.vc.pause()
+
+    @commands.command(name="resume", help="Pauses the current song being played")
+    async def resume(self,ctx):
+        if self.vc != "" and self.vc:
+            self.vc.resume()
