@@ -72,7 +72,7 @@ class music_cog(commands.Cog):
         else:
             self.is_playing = False
 
-    @commands.command(name="play", help="Plays a selected song from youtube")
+    @commands.command(name="play", help="!!play {link/name} - Plays a selected song from youtube")
     async def p(self, ctx, *args):
         query = " ".join(args)
         
@@ -90,7 +90,7 @@ class music_cog(commands.Cog):
                 if self.is_playing == False:
                     await self.play_music(ctx)
 
-    @commands.command(name="queue", help="Displays the current songs in queue")
+    @commands.command(name="queue", help="!!queue - Displays the current songs in queue")
     async def q(self, ctx):
         retval = ""
         for i in range(0, len(self.music_queue)):
@@ -102,7 +102,7 @@ class music_cog(commands.Cog):
         else:
             await ctx.send("No music in queue")
 
-    @commands.command(name="ImReallyGay", help="Skips the current song being played")
+    @commands.command(name="ImReallyGay", help="!!ImReallyGay - Skips the current song being played")
     async def skip(self, ctx):
         if self.vc != "" and self.vc:
             self.vc.stop()
@@ -113,12 +113,12 @@ class music_cog(commands.Cog):
             except:
                 pass
 
-    @commands.command(name="pause", help="Pauses the current song being played")
+    @commands.command(name="pause", help="!!pause - Pauses the current song being played")
     async def pause(self,ctx):
         if self.vc != "" and self.vc:
             self.vc.pause()
 
-    @commands.command(name="resume", help="Pauses the current song being played")
+    @commands.command(name="resume", help="!!resume - Resumes the current song being played")
     async def resume(self,ctx):
         if self.vc != "" and self.vc:
             self.vc.resume()
