@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import random
+import json 
 
 class util_cog(commands.Cog):
 
