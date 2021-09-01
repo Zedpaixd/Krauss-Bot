@@ -5,7 +5,7 @@ import json
 
 class util_cog(commands.Cog):
 
-    @commands.command(name="random", help="!!random a b - Provides a random number between a and b")
+    @commands.command(name="random", help="random a b - Provides a random number between a and b")
     async def random(self, ctx, *, query):
 
         try:
