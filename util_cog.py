@@ -3,6 +3,9 @@ from discord.ext import commands
 import random
 import json 
 
+# PING - PONG (delay + tag author)
+# !!kill - Killing is bad.
+
 class util_cog(commands.Cog):
 
     @commands.command(name="random", help="random a b - Provides a random number between a and b")
@@ -18,3 +21,20 @@ class util_cog(commands.Cog):
         
         except:
             await ctx.send("How do you expect me to give you a random integer when you don't input 2 digits")
+
+
+
+    @commands.command(name="bully", help="bully @Person - You virtually bully a person in a unique way")
+    async def bully(self, ctx, *, query):
+
+            query = query.strip()
+            
+            with open("bully messages.txt","r") as file:
+                content = file.read()
+
+            content = content.split("\n")
+            botMessage = random.choice(content)
+
+            author = '{0.author.mention}'.format(ctx.message)
+            await ctx.send(botMessage.format(author,query))
+
