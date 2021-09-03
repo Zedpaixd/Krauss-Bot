@@ -43,7 +43,7 @@ async def on_guild_join(guild):
 
 
 
-@bot.command(name = "setPrefix", help="!!random x - Sets the bot prefix to x")
+@bot.command(name = "setPrefix", help="setPrefix x - Sets the bot prefix to x")
 async def setPrefix(ctx,prefix):
 
     with open("prefixes.json","r") as file:
