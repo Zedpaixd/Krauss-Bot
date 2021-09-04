@@ -38,3 +38,8 @@ class util_cog(commands.Cog):
             author = '{0.author.mention}'.format(ctx.message)
             await ctx.send(botMessage.format(author,query))
 
+
+    @commands.command(name="kill", help="kill @Person - You virtually kill a person")
+    async def kill(self, ctx, *, query):
+        author = '{0.author.mention}'.format(ctx.message)
+        await ctx.send("Killing is bad, {}".format(author))
