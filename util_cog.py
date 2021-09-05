@@ -4,7 +4,6 @@ import random
 import json 
 
 # PING - PONG (delay + tag author)
-# !!kill - Killing is bad.
 
 class util_cog(commands.Cog):
 
