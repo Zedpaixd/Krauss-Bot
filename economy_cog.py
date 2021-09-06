@@ -79,11 +79,45 @@ class econ_cog(commands.Cog):
             amount = int(amount)
 
             userData = loadUserData(ctx.author.id)
-            userData.wallet = userData.wallet - amount
-            userData.bank = userData.bank + amount
-            saveUserData(ctx.author.id,userData)
 
-            await ctx.send("Successfully deposited {} Krauss Coins!".format(amount))
+            if amount <= userData.wallet:
+
+                userData.wallet = userData.wallet - amount
+                userData.bank = userData.bank + amount
+                saveUserData(ctx.author.id,userData)
+
+                await ctx.send("Successfully deposited {} Krauss Coins!".format(amount))
+
+            else:
+
+                await ctx.send("You don't have enough Krauss Coins to perform this action.")
+
+        except:
+
+            await ctx.send("Some error happened, please use only integer amounts")
+
+
+    @commands.command(name="withdraw", help="withdraw x - Withdraws x amount of money from your bank")
+    async def withdraw(self, ctx, *, amount):
+
+        amount = amount.strip()
+
+        try:
+            amount = int(amount)
+
+            userData = loadUserData(ctx.author.id)
+
+            if amount <= userData.bank:
+
+                userData.bank = userData.bank - amount
+                userData.wallet = userData.wallet + amount
+                saveUserData(ctx.author.id,userData)
+
+                await ctx.send("Successfully withdrawn {} Krauss Coins!".format(amount))
+
+            else:
+
+                await ctx.send("You don't have enough Krauss Coins to perform this action.")
 
         except:
 
