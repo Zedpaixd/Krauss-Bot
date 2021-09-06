@@ -69,3 +69,22 @@ class econ_cog(commands.Cog):
         embed.add_field(name="Bank",value = str(userData.bank))
 
         await ctx.send(embed=embed)
+
+    @commands.command(name="deposit", help="deposit x - Deposits x amount to your bank")
+    async def deposit(self, ctx, *, amount):
+
+        amount = amount.strip()
+
+        try:
+            amount = int(amount)
+
+            userData = loadUserData(ctx.author.id)
+            userData.wallet = userData.wallet - amount
+            userData.bank = userData.bank + amount
+            saveUserData(ctx.author.id,userData)
+
+            await ctx.send("Successfully deposited {} Krauss Coins!".format(amount))
+
+        except:
+
+            await ctx.send("Some error happened, please use only integer amounts")
