@@ -26,6 +26,12 @@ with open ("botToken.txt","r") as tkn:
     token = tkn.read()
 
 @bot.event
+async def on_command_error(ctx,error):
+    if isinstance(error, commands.CommandOnCooldown):
+        await ctx.send("Command on cooldown. Please try again in {} seconds".format(int(error.retry_after)))
+
+
+@bot.event
 async def on_ready():
     await bot.change_presence(status=discord.Status.dnd, activity = discord.Game("!!help"))
 
