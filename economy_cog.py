@@ -6,7 +6,7 @@ import pickle
 import os
 
 
-# Rob , Give , Yoink
+# Rob , Give , Yoink , Beg
 
 def dataFileLoader():
 
@@ -48,6 +48,7 @@ class Data():
 class econ_cog(commands.Cog):
 
     @commands.command(name="work", help="work - Gives you a random amount of currency")
+    @commands.cooldown(1,3600,commands.BucketType.user)
     async def work(self, ctx):
 
         income = random.randint(2,1000)
