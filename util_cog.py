@@ -8,7 +8,7 @@ import json
 class util_cog(commands.Cog):
 
     @commands.command(name="random", help="random a b - Provides a random number between a and b")
-    async def random(self, ctx, *, query):
+    async def random(self, ctx, *, query = ""):
 
         try:
             values = query.strip().split(" ")
@@ -24,21 +24,29 @@ class util_cog(commands.Cog):
 
 
     @commands.command(name="bully", help="bully @Person - You virtually bully a person in a unique way")
-    async def bully(self, ctx, *, query):
-
-            query = query.strip()
+    async def bully(self, ctx, *, query = ""):
+        
+        try:
+            if (query != ""):
+                query = query.strip()
             
-            with open("bully messages.txt","r") as file:
-                content = file.read()
+                with open("bully messages.txt","r") as file:
+                    content = file.read()
 
-            content = content.split("\n")
-            botMessage = random.choice(content)
+                content = content.split("\n")
+                botMessage = random.choice(content)
 
-            author = '{0.author.mention}'.format(ctx.message)
-            await ctx.send(botMessage.format(author,query))
+                author = '{0.author.mention}'.format(ctx.message)
+                await ctx.send(botMessage.format(author,query))
+
+            else:
+                await ctx.send("Don't bully yourself... {}".format('{0.author.mention}'.format(ctx.message)))
+
+        except:
+            await ctx.send("Some error happened, make sure the syntax is correct.")
 
 
     @commands.command(name="kill", help="kill @Person - You virtually kill a person")
-    async def kill(self, ctx, *, query):
+    async def kill(self, ctx, *, query = ""):
         author = '{0.author.mention}'.format(ctx.message)
         await ctx.send("Killing is bad, {}".format(author))
