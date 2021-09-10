@@ -61,15 +61,19 @@ class econ_cog(commands.Cog):
 
         
     @commands.command(name="balance", help="balance - Shows your balance, both in bank and in your wallet")
-    async def balance(self, ctx):
+    async def balance(self, ctx, *, query = ""):
+        
+        if (query == ""):
+            userData = loadUserData(ctx.author.id)
 
-        userData = loadUserData(ctx.author.id)
+            embed = discord.Embed(title = "{}'s balance".format(ctx.author.display_name))
+            embed.add_field(name="Wallet",value = str(userData.wallet))
+            embed.add_field(name="Bank",value = str(userData.bank))
 
-        embed = discord.Embed(title = "{}'s balance".format(ctx.author.display_name))
-        embed.add_field(name="Wallet",value = str(userData.wallet))
-        embed.add_field(name="Bank",value = str(userData.bank))
+            await ctx.send(embed=embed)
 
-        await ctx.send(embed=embed)
+        else:
+            await ctx.send("In a real life situation you would not be able to just look into someone else's balance, so neither can you here.")
 
     @commands.command(name="deposit", help="deposit x - Deposits x amount to your bank")
     async def deposit(self, ctx, *, amount):
