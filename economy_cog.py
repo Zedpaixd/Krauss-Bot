@@ -123,3 +123,20 @@ class econ_cog(commands.Cog):
         except:
 
             await ctx.send("Some error happened, please use only integer amounts")
+
+    @commands.command(name="beg", help="beg - Gives you a random amount of currency")
+    @commands.cooldown(1,300,commands.BucketType.user)
+    async def work(self, ctx):
+
+        income = random.randint(0,50)
+
+        if income != 1:
+            s = "s"
+        else:
+            s = ""
+
+        userData = loadUserData(ctx.author.id)
+        userData.wallet = userData.wallet + income
+        saveUserData(ctx.author.id,userData)
+
+        await ctx.send("Begging got you {} Krauss Coin{}!".format(income,s))
