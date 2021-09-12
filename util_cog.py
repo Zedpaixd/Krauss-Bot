@@ -48,5 +48,34 @@ class util_cog(commands.Cog):
 
     @commands.command(name="kill", help="kill @Person - You virtually kill a person")
     async def kill(self, ctx, *, query = ""):
+
         author = '{0.author.mention}'.format(ctx.message)
         await ctx.send("Killing is bad, {}".format(author))
+
+
+    @commands.command(name="mock", help="mock text - mOcKs ThE tExT")
+    async def mock(self, ctx, *, query = ""):
+
+        finalString = ""
+        query = query.split(" ")
+
+        if len(query[0]) % 2 == 0:
+            step = 0
+        else:
+            step = 1
+
+        for i in range(len(query)):
+
+            for j in range(len(query[i])):
+
+                if step == 0:
+                    finalString = finalString + query[i][j].lower()
+                    step += 1
+
+                else:
+                    finalString = finalString + query[i][j].upper()
+                    step -= 1
+
+            finalString = finalString + " "
+
+        await ctx.send(finalString)
