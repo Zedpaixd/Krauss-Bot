@@ -65,4 +65,10 @@ async def setPrefix(ctx,prefix):
         json.dump(prefixes,file)
 
 
+
+@bot.command()
+async def ping(ctx):
+
+    await ctx.send('Pong! {} ({} milliseconds)'.format('{0.author.mention}'.format(ctx.message), int(round(bot.latency, 3)*1000)))
+
 bot.run(token)
