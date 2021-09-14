@@ -207,4 +207,34 @@ class game_cog(commands.Cog):
         else:
             await ctx.send("Progress: {}\nGuesses: {}\nLives: {}".format(hangmanUniqueInstance.returnProgress(),hangmanUniqueInstance.returnGuesses(),hangmanUniqueInstance.returnLives()))
 
+    @commands.command(name="rps", help="rps rock/paper/scissors - you play a game of RPS against the AI")
+    async def rps(self, ctx, *, choice = ""):
+
+        choice = choice.strip().lower()
+        values = {"scissors": 1,
+                  "paper": 2,
+                  "rock": 0}
+
+        if choice not in ["rock", "paper", "scissors"]:
+            await ctx.send("Did you misstype? Please write only rock, paper or scissors.")
+        
+        else:
+            AI = random.choice(["rock", "paper", "scissors"])
+
+            user = values[choice]
+            comp = values[AI]
+
+            gameResult = ""
+
+            if (user < comp and abs(user - comp) == 1) or (user == 2 and comp == 0):  #Yep... don't ask about the latter
+                gameResult = "You win!"
+
+            elif user == comp:
+                gameResult = "You two tie."
+
+            else:
+                gameResult = "You lost."
+
+            await ctx.send("You picked **{}** and the AI picked **{}**. {}".format(choice,AI,gameResult))
+
 
