@@ -226,7 +226,8 @@ class game_cog(commands.Cog):
 
             gameResult = ""
 
-            if (user < comp and abs(user - comp) == 1) or (user == 2 and comp == 0):  #Yep... don't ask about the latter
+            #if (user < comp and abs(user - comp) == 1) or (user == 2 and comp == 0):  #Yep... don't ask about the latter
+            if user == (comp-1)%3:
                 gameResult = "You win!"
 
             elif user == comp:
