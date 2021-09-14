@@ -6,21 +6,43 @@ from discord.ext import commands
 from music_cog import music_cog
 from util_cog import util_cog
 from economy_cog import *
+from game_cog import *
 import json
+
 
 def getPrefix(bot,message):
 
-    with open ("prefixes.json","r") as file:
+    try:
+        with open ("prefixes.json","r") as file:
 
-        prefixes = json.load(file)
+            prefixes = json.load(file)
+            return prefixes[str(message.guild.id)]
 
-    return prefixes[str(message.guild.id)]
+    except KeyError:
+
+        with open("prefixes.json","r") as file:
+            prefixes = json.load(file)
+
+        prefixes[str(message.guild.id)] = "!!"
+
+
+        with open("prefixes.json","w") as file:
+            json.dump(prefixes,file)
+
+
+        with open("prefixes.json","r") as file:
+            prefixes = json.load(file)
+            return prefixes[str(message.guild.id)]
+
+    except:
+        return "!!"
 
 bot = commands.Bot(command_prefix=getPrefix, case_insensitive=True)
 
 bot.add_cog(music_cog(bot))
 bot.add_cog(util_cog(bot))
 bot.add_cog(econ_cog(bot))
+bot.add_cog(game_cog(bot))
 
 with open ("botToken.txt","r") as tkn:
     token = tkn.read()
