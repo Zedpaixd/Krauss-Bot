@@ -1,4 +1,3 @@
-#pip install nltk
 import random
 from discord.ext import commands
 import discord
