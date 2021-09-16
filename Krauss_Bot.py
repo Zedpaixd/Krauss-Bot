@@ -86,6 +86,8 @@ async def setPrefix(ctx,prefix):
 
         json.dump(prefixes,file)
 
+    await ctx.send("Successfully changed the prefix to {}".format(prefix))
+
 
 
 @bot.command()
