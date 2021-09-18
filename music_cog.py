@@ -79,7 +79,7 @@ class music_cog(commands.Cog):
 
 
     @commands.command(name="play", help="play {link/name} - Plays a selected song from youtube")
-    async def p(self, ctx, *args):
+    async def play(self, ctx, *args):
 
         query = " ".join(args)
         
@@ -103,7 +103,7 @@ class music_cog(commands.Cog):
 
 
     @commands.command(name="queue", help="queue - Displays the current songs in queue")
-    async def q(self, ctx):
+    async def queue(self, ctx):
 
         retval = ""
 
@@ -145,3 +145,8 @@ class music_cog(commands.Cog):
 
         if self.vc != "" and self.vc:
             self.vc.resume()
+
+    @commands.command(name="disconnect", help="disconnect - Leaves the voice channel")
+    async def disconnect(self, ctx):
+         await ctx.voice_client.disconnect()
+         await ctx.send("Disconnected!")
