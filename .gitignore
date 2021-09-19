@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/botToken.txt
+/data.pickle
+/prefixes.json
