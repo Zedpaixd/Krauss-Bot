@@ -47,7 +47,7 @@ class Data():
 
 class econ_cog(commands.Cog):
 
-    @commands.command(name="work", help="work - Gives you a random amount of currency")
+    @commands.command(name="work", help="Gives you a random amount of currency")
     @commands.cooldown(1,3600,commands.BucketType.user)
     async def work(self, ctx):
 
@@ -60,7 +60,7 @@ class econ_cog(commands.Cog):
         await ctx.send("You earned {} Krauss Coins!".format(income))
 
         
-    @commands.command(name="balance", help="balance - Shows your balance, both in bank and in your wallet")
+    @commands.command(name="balance", aliases=["bank","money","wallet"], help="Shows your balance, both in bank and in your wallet")
     async def balance(self, ctx, *, query = ""):
         
         if (query == ""):
@@ -75,7 +75,8 @@ class econ_cog(commands.Cog):
         else:
             await ctx.send("In a real life situation you would not be able to just look into someone else's balance, so neither can you here.")
 
-    @commands.command(name="deposit", help="deposit x - Deposits x amount to your bank")
+
+    @commands.command(name="deposit", help="Deposits x amount to your bank")
     async def deposit(self, ctx, *, amount):
 
         amount = amount.strip()
@@ -102,7 +103,7 @@ class econ_cog(commands.Cog):
             await ctx.send("Some error happened, please use only integer amounts")
 
 
-    @commands.command(name="withdraw", help="withdraw x - Withdraws x amount of money from your bank")
+    @commands.command(name="withdraw", help="Withdraws x amount of money from your bank")
     async def withdraw(self, ctx, *, amount):
 
         amount = amount.strip()
@@ -129,7 +130,7 @@ class econ_cog(commands.Cog):
             await ctx.send("Some error happened, please use only integer amounts")
 
 
-    @commands.command(name="beg", help="beg - Gives you a random amount of currency")
+    @commands.command(name="beg", help="Gives you a random amount of currency")
     @commands.cooldown(1,300,commands.BucketType.user)
     async def beg(self, ctx):
 
@@ -147,7 +148,7 @@ class econ_cog(commands.Cog):
         await ctx.send("Begging got you {} Krauss Coin{}!".format(income,s))
 
 
-    @commands.command(name="give", help="give @person amount - Donates a part of your money to the person in cause")
+    @commands.command(name="give", help="Donates a part of your money to the person in cause")
     async def give(self, ctx, user: discord.User, amount = None):
         
         user = user.id
@@ -174,4 +175,64 @@ class econ_cog(commands.Cog):
             except:
                 await ctx.send("Did you misstype the amount? Please only use integers")
 
+
+    @commands.command(name="rob", help="You attempt robbing a person")
+    async def rob(self, ctx, user: discord.User):
+
+        user = user.id
+        authorBank = loadUserData(ctx.author.id)
+        mentionedBank = loadUserData(user)
+
+        outcome = random.randint(1,100)
+
+        if (outcome<15):
+            
+            robbedAmount = random.randint(mentionedBank.wallet//2,mentionedBank.wallet)
+
+            if robbedAmount != 1:
+                s = "s"
+            else:
+                s = ""
+
+            authorBank.wallet = authorBank.wallet + robbedAmount 
+            mentionedBank.wallet = mentionedBank.wallet - robbedAmount
+            saveUserData(ctx.author.id,authorBank)
+            saveUserData(user,mentionedBank)
+
+            await ctx.send("You've stolen a LOT of their belongings. Now if it categorizes as a lot, that is up to you. You've received {} Krauss Coin{}.".format(robbedAmount,s))
         
+        elif (outcome < 50):
+
+            robbedAmount = random.randint(0,mentionedBank.wallet//5)
+
+            if robbedAmount != 1:
+                s = "s"
+            else:
+                s = ""
+
+            authorBank.wallet = authorBank.wallet + robbedAmount 
+            mentionedBank.wallet = mentionedBank.wallet - robbedAmount
+            saveUserData(ctx.author.id,authorBank)
+            saveUserData(user,mentionedBank)
+
+            await ctx.send("The rob was successful. You've stolen {} Krauss Coin{}.".format(robbedAmount,s))
+
+        elif (outcome < 75):
+
+            await ctx.send("You did not get the chance to steal Krauss Coins from your target, they were on guard.")
+
+        else:
+
+            paidAmount = random.randint(0,authorBank.wallet)
+
+            if paidAmount != 1:
+                s = "s"
+            else:
+                s = ""
+
+            authorBank.wallet = authorBank.wallet - paidAmount 
+            mentionedBank.wallet = mentionedBank.wallet + paidAmount
+            saveUserData(ctx.author.id,authorBank)
+            saveUserData(user,mentionedBank)
+
+            await ctx.send("Your rob was unsuccessful. In fact, it went so badly that you were taken to court! You've lost {} Krauss Coin{}.".format(paidAmount,s))
