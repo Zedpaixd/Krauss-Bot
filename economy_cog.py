@@ -128,9 +128,10 @@ class econ_cog(commands.Cog):
 
             await ctx.send("Some error happened, please use only integer amounts")
 
+
     @commands.command(name="beg", help="beg - Gives you a random amount of currency")
     @commands.cooldown(1,300,commands.BucketType.user)
-    async def work(self, ctx):
+    async def beg(self, ctx):
 
         income = random.randint(0,50)
 
@@ -144,3 +145,33 @@ class econ_cog(commands.Cog):
         saveUserData(ctx.author.id,userData)
 
         await ctx.send("Begging got you {} Krauss Coin{}!".format(income,s))
+
+
+    @commands.command(name="give", help="give @person amount - Donates a part of your money to the person in cause")
+    async def give(self, ctx, user: discord.User, amount = None):
+        
+        user = user.id
+
+        if amount == None:
+            await ctx.send("Please enter the amount")
+
+        else:
+            try:
+                amount = int(amount)
+
+                authorBank = loadUserData(ctx.author.id)
+                mentionedBank = loadUserData(user)
+
+                if amount > authorBank.wallet:
+                    await ctx.send("You can not give more money than you have in your wallet.")
+
+                else:
+                    authorBank.wallet = authorBank.wallet - amount 
+                    mentionedBank.wallet = mentionedBank.wallet + amount
+                    saveUserData(ctx.author.id,authorBank)
+                    saveUserData(user,mentionedBank)
+        
+            except:
+                await ctx.send("Did you misstype the amount? Please only use integers")
+
+        
