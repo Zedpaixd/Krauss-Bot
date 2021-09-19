@@ -146,7 +146,9 @@ class music_cog(commands.Cog):
         if self.vc != "" and self.vc:
             self.vc.resume()
 
+
     @commands.command(name="disconnect", help="disconnect - Leaves the voice channel")
     async def disconnect(self, ctx):
+
          await ctx.voice_client.disconnect()
          await ctx.send("Disconnected!")
