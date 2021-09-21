@@ -1,9 +1,17 @@
+#pip install prsaw
+
 import discord
 from discord.ext import commands
 import random
 import json 
+from prsaw import RandomStuff
 
-# PING - PONG (delay + tag author)
+
+with open("apiKey.txt","r") as file:
+    key = file.read()
+
+chatbot = RandomStuff(api_key=key)
+
 
 class util_cog(commands.Cog):
 
@@ -79,3 +87,10 @@ class util_cog(commands.Cog):
             finalString = finalString + " "
 
         await ctx.send(finalString)
+
+    @commands.command(name="chatbot", help="Want to talk to Zul Krauss? Now you can!")
+    async def chatbot(self, ctx, *, message):
+        
+        message = str(message)
+
+        await ctx.send(chatbot.get_ai_response(message)[0]["message"])
