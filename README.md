@@ -7,17 +7,18 @@ Given how the bot is open source, you're more than welcome to download the files
 
 # To Install
 First things first, you will need python to be installed and then install the following libraries via the following commands:
-- py get-pip.py (Windows) | $ python get-pip.py (Linux / MacOS)   - installing pip in order to download custom made libraries
-- pip install discord      - discord api
-- pip install PyNaCl       - to improve usability, security and speed.
+- py get-pip.py (Windows) | $ python get-pip.py (Linux / MacOS)   - Installing pip in order to download custom made libraries
+- pip install discord      - Discord's api
+- pip install PyNaCl       - To improve usability, security and speed.
 - pip install youtube_dl   - To download songs from YouTube in order to be played via the music bot features of the bot
 - pip install ffmpeg       - To allow the bot to actually play the songs in a voice chat
-- pip install nltk         - used to provide a list of words for the hangman game
+- pip install nltk         - Used to provide a list of words for the hangman game
+- pip install prsaw        - Api used to provide human-like bot replies to everyday chat (!!chatbot)
 
 Once you are done with installing the libraries, you will need to create 2 files:
 - "botToken.txt" - a simple bot token file. Create it, paste the token in there and save
 - "prefixes.json" - a json file where prefixes of servers will be added. If any issues arise with the file, instead of leaving it empty add " {} " inside it, without the quotation marks nor spaces.
-
+- "apiKey.txt" - a txt file containing the api token for the prsaw api. You can get yours here by simply [signing in here](https://api-info.pgamerx.com/register.html)
 
 # Bot Features
 Will start writing here once more features have been added
