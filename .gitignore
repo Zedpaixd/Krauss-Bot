@@ -341,3 +341,4 @@ healthchecksdb
 /botToken.txt
 /data.pickle
 /prefixes.json
+/apiKey.txt
