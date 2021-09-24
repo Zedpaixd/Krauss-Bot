@@ -88,9 +88,70 @@ class util_cog(commands.Cog):
 
         await ctx.send(finalString)
 
+
     @commands.command(name="chatbot", help="Want to talk to Zul Krauss? Now you can!")
     async def chatbot(self, ctx, *, message):
         
         message = str(message)
 
         await ctx.send(chatbot.get_ai_response(message)[0]["message"])
+
+
+    @commands.command(name="pun", help="Want some puns?")
+    async def pun(self, ctx):
+
+        joke = chatbot.get_joke("pun")
+
+        try:
+
+            await ctx.send("{}\n{}".format(joke["setup"],joke["delivery"]))
+        
+        except:
+
+            try:
+
+                await ctx.send("{}".format(joke["joke"]))
+
+            except: 
+
+                await ctx.send("{}    - IF YOU FIND THIS FORMAT, SEND ME A PICTURE OF IT Planta#9305".format(joke))
+
+
+    @commands.command(name="pjoke", help="Programming jokes")
+    async def pjoke(self, ctx):
+
+        joke = chatbot.get_joke("dev")
+
+        try:
+
+            await ctx.send("{}\n{}".format(joke["setup"],joke["delivery"]))
+        
+        except:
+
+            try:
+
+                await ctx.send("{}".format(joke["joke"]))
+
+            except: 
+
+                await ctx.send("{}    - IF YOU FIND THIS FORMAT, SEND ME A PICTURE OF IT Planta#9305".format(joke))
+
+
+    @commands.command(name="spooky", help="\"Spooky\" stuff")
+    async def spooky(self, ctx):
+
+        joke = chatbot.get_joke("spooky")
+
+        try:
+
+            await ctx.send("{}\n{}".format(joke["setup"],joke["delivery"]))
+        
+        except:
+
+            try:
+
+                await ctx.send("{}".format(joke["joke"]))
+
+            except: 
+
+                await ctx.send("{}    - IF YOU FIND THIS FORMAT, SEND ME A PICTURE OF IT Planta#9305".format(joke))
