@@ -8,6 +8,10 @@ import os
 
 # Yoink
 
+store = [[{"name":"Bomb"},{"price":500},{"description":"Chance of explosion upon you being robbed, saving your money"}],
+         [{"name":"Donation to charity"},{"price":999999999},{"description":"What the name says"}]]
+
+
 def dataFileLoader():
 
     if os.path.isfile("data.pickle"):
@@ -37,6 +41,32 @@ def saveUserData(userID, userData):
         pickle.dump(data, file)
 
 
+def canBuy(ctx, itemName):
+        
+    itemName = itemName.lower()
+    _name = ""
+
+    for item in store:
+
+        name = item[0]["name"].lower()
+
+        if name == itemName:
+
+            _name = name
+            price = item[1]["price"]
+            break
+
+    if _name == "":
+            
+        return False
+
+    authorBank = loadUserData(ctx.author.id)
+
+    if authorBank.wallet < price:
+            
+        return False
+
+    return True
 
 class Data():
 
@@ -184,68 +214,79 @@ class econ_cog(commands.Cog):
         authorBank = loadUserData(ctx.author.id)
         mentionedBank = loadUserData(user)
 
-        if mentionedBank.wallet < 1:
+        if (mentionedBank.bomb == 1):
 
-            await ctx.send("The person doesn't have any money, what are you trying to rob?")
+            chance = random.randint(1,100)
 
-        else:
+            if (chance <= 50):
 
-            outcome = random.randint(1,100)
-
-            if (outcome<15):
-            
-                robbedAmount = random.randint(mentionedBank.wallet//2,mentionedBank.wallet)
-
-                if robbedAmount != 1:
-                    s = "s"
-
-                else:
-                    s = ""
-
-                authorBank.wallet = authorBank.wallet + robbedAmount 
-                mentionedBank.wallet = mentionedBank.wallet - robbedAmount
-                saveUserData(ctx.author.id,authorBank)
-                saveUserData(user,mentionedBank)
-
-                await ctx.send("You've stolen a LOT of their belongings. Now if it categorizes as a lot, that is up to you. You've received {} Krauss Coin{}.".format(robbedAmount,s))
-        
-            elif (outcome < 50):
-
-                robbedAmount = random.randint(0,mentionedBank.wallet//5)
-
-                if robbedAmount != 1:
-                    s = "s"
-
-                else:
-                    s = ""
-
-                authorBank.wallet = authorBank.wallet + robbedAmount 
-                mentionedBank.wallet = mentionedBank.wallet - robbedAmount
-                saveUserData(ctx.author.id,authorBank)
-                saveUserData(user,mentionedBank)
-
-                await ctx.send("The rob was successful. You've stolen {} Krauss Coin{}.".format(robbedAmount,s))
-
-            elif (outcome < 75):
-
-                await ctx.send("You did not get the chance to steal Krauss Coins from your target, they were on guard.")
+                await ctx.send("The person who you are trying to rob's bomb has exploded making a loud noise. To not be caught you ran away")
+                mentionedBank.bomb = 0
 
             else:
 
-                paidAmount = random.randint(0,authorBank.wallet)
+                if mentionedBank.wallet < 1:
 
-                if paidAmount != 1:
-                    s = "s"
+                    await ctx.send("The person doesn't have any money, what are you trying to rob?")
 
                 else:
-                    s = ""
 
-                authorBank.wallet = authorBank.wallet - paidAmount 
-                mentionedBank.wallet = mentionedBank.wallet + paidAmount
-                saveUserData(ctx.author.id,authorBank)
-                saveUserData(user,mentionedBank)
+                    outcome = random.randint(1,100)
 
-                await ctx.send("Your rob was unsuccessful. In fact, it went so badly that you were taken to court! You've lost {} Krauss Coin{}.".format(paidAmount,s))
+                    if (outcome<15):
+            
+                        robbedAmount = random.randint(mentionedBank.wallet//2,mentionedBank.wallet)
+
+                        if robbedAmount != 1:
+                            s = "s"
+
+                        else:
+                            s = ""
+
+                        authorBank.wallet = authorBank.wallet + robbedAmount 
+                        mentionedBank.wallet = mentionedBank.wallet - robbedAmount
+                        saveUserData(ctx.author.id,authorBank)
+                        saveUserData(user,mentionedBank)
+
+                        await ctx.send("You've stolen a LOT of their belongings. Now if it categorizes as a lot, that is up to you. You've received {} Krauss Coin{}.".format(robbedAmount,s))
+        
+                    elif (outcome < 50):
+
+                        robbedAmount = random.randint(0,mentionedBank.wallet//5)
+
+                        if robbedAmount != 1:
+                            s = "s"
+
+                        else:
+                            s = ""
+
+                        authorBank.wallet = authorBank.wallet + robbedAmount 
+                        mentionedBank.wallet = mentionedBank.wallet - robbedAmount
+                        saveUserData(ctx.author.id,authorBank)
+                        saveUserData(user,mentionedBank)
+
+                        await ctx.send("The rob was successful. You've stolen {} Krauss Coin{}.".format(robbedAmount,s))
+
+                    elif (outcome < 75):
+
+                        await ctx.send("You did not get the chance to steal Krauss Coins from your target, they were on guard.")
+
+                    else:
+
+                        paidAmount = random.randint(0,authorBank.wallet)
+
+                        if paidAmount != 1:
+                            s = "s"
+
+                        else:
+                            s = ""
+
+                        authorBank.wallet = authorBank.wallet - paidAmount 
+                        mentionedBank.wallet = mentionedBank.wallet + paidAmount
+                        saveUserData(ctx.author.id,authorBank)
+                        saveUserData(user,mentionedBank)
+
+                        await ctx.send("Your rob was unsuccessful. In fact, it went so badly that you were taken to court! You've lost {} Krauss Coin{}.".format(paidAmount,s))
 
 
     @commands.command(name="bankRob", help="You try robbing a bank. Big risk but big payoff")
@@ -271,3 +312,36 @@ class econ_cog(commands.Cog):
             saveUserData(ctx.author.id,authorBank)
 
             await ctx.send("Your attempt to rob the bank was successful and you've managed to take {} Krauss Coins".format(pay))
+
+
+    @commands.command(name="Shop", help="Shows you the items we currently have in store")
+    async def shop(self,ctx):
+
+        embedMsg = discord.Embed(title = "Shop")
+
+        for item in store:
+            name = item[0]["name"]
+            price = item[1]["price"]
+            description = item[2]["description"]
+
+            embedMsg.add_field(name=name, value="{} Krauss Coins | {}".format(price,description))
+
+        await ctx.send(embed = embedMsg)
+
+
+    @commands.command(name="Buy", help="Buys an item from the availables one in the shop")
+    async def buy(self, ctx, *, query=""):
+
+        buyable = canBuy(ctx, query.strip())
+
+        if buyable == True:
+
+            await ctx.send("Buyable!")
+            # Buy code goes here
+
+        else:
+
+            await ctx.send("Either you misspelled the name or you don't have enough money in your wallet.")
+
+
+    
