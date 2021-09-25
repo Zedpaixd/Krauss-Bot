@@ -9,7 +9,8 @@ import os
 # Yoink
 
 store = [[{"name":"Bomb"},{"price":500},{"description":"Chance of explosion upon you being robbed, saving your money"}],
-         [{"name":"Donation to charity"},{"price":999999999},{"description":"What the name says"}]]
+         [{"name":"Donation to charity"},{"price":99999},{"description":"What the name says"}],
+         [{"name":"Nothing"},{"price":2},{"description":"Genuinely nothing, what are you looking at"}]]
 
 
 def dataFileLoader():
@@ -22,14 +23,16 @@ def dataFileLoader():
     else:
         return dict()
 
+
 def loadUserData(userID):
 
     data = dataFileLoader()
 
     if userID not in data:
-        return Data(0, 0)
+        return Data(0, 0, {})
 
     return data[userID]
+
 
 def saveUserData(userID, userData):
 
@@ -58,26 +61,38 @@ def canBuy(ctx, itemName):
 
     if _name == "":
             
-        return False
+        return False,0
 
     authorBank = loadUserData(ctx.author.id)
 
     if authorBank.wallet < price:
             
-        return False
+        return False,0
 
-    return True
+    return True,price
+        
+
+
+
+
+
 
 class Data():
 
-    def __init__(self, wallet, bank):
+    def __init__(self, wallet, bank, items):
         self.wallet = wallet
         self.bank = bank
+        self.items = {}
+        
+
+
+
+
 
 
 class econ_cog(commands.Cog):
 
-    @commands.command(name="work", help="Gives you a random amount of currency")
+    @commands.command(name="Work", help="Gives you a random amount of currency")
     @commands.cooldown(1,3600,commands.BucketType.user)
     async def work(self, ctx):
 
@@ -89,8 +104,9 @@ class econ_cog(commands.Cog):
 
         await ctx.send("You earned {} Krauss Coins!".format(income))
 
+
         
-    @commands.command(name="balance", aliases=["bank","money","wallet"], help="Shows your balance, both in bank and in your wallet")
+    @commands.command(name="Balance", aliases=["bank","money","wallet"], help="Shows your balance, both in bank and in your wallet")
     async def balance(self, ctx, *, query = ""):
         
         if (query == ""):
@@ -106,7 +122,27 @@ class econ_cog(commands.Cog):
             await ctx.send("In a real life situation you would not be able to just look into someone else's balance, so neither can you here.")
 
 
-    @commands.command(name="deposit", help="Deposits x amount to your bank")
+
+    @commands.command(name="Inventory", aliases=["bag","stash","backpack"], help="Shows your inventory")
+    async def inventory(self, ctx, *, query = ""):
+
+        if (query == ""):
+            userData = loadUserData(ctx.author.id)
+
+            embed = discord.Embed(title = "{}'s inventory".format(ctx.author.display_name))
+            
+            for item in userData.items:
+
+                embed.add_field(name=item, value=str(userData.items[item]))
+
+            await ctx.send(embed=embed)
+
+        else:
+            await ctx.send("In a real life situation you would not be able to just look into someone else's balance, so neither can you here.")
+
+
+
+    @commands.command(name="Deposit", help="Deposits x amount to your bank")
     async def deposit(self, ctx, *, amount):
 
         amount = amount.strip()
@@ -133,7 +169,8 @@ class econ_cog(commands.Cog):
             await ctx.send("Some error happened, please use only integer amounts")
 
 
-    @commands.command(name="withdraw", help="Withdraws x amount of money from your bank")
+
+    @commands.command(name="Withdraw", help="Withdraws x amount of money from your bank")
     async def withdraw(self, ctx, *, amount):
 
         amount = amount.strip()
@@ -160,7 +197,8 @@ class econ_cog(commands.Cog):
             await ctx.send("Some error happened, please use only integer amounts")
 
 
-    @commands.command(name="beg", help="Gives you a random amount of currency")
+
+    @commands.command(name="Beg", help="Gives you a random amount of currency")
     @commands.cooldown(1,300,commands.BucketType.user)
     async def beg(self, ctx):
 
@@ -170,15 +208,14 @@ class econ_cog(commands.Cog):
             s = "s"
         else:
             s = ""
-
         userData = loadUserData(ctx.author.id)
         userData.wallet = userData.wallet + income
         saveUserData(ctx.author.id,userData)
-
         await ctx.send("Begging got you {} Krauss Coin{}!".format(income,s))
 
 
-    @commands.command(name="give", help="Donates a part of your money to the person in cause")
+
+    @commands.command(name="Give", help="Donates a part of your money to the person in cause")
     async def give(self, ctx, user: discord.User, amount = None):
         
         user = user.id
@@ -206,7 +243,8 @@ class econ_cog(commands.Cog):
                 await ctx.send("Did you misstype the amount? Please only use integers")
 
 
-    @commands.command(name="rob", help="You attempt robbing a person")
+
+    @commands.command(name="Rob", help="You attempt robbing a person")
     @commands.cooldown(1,60,commands.BucketType.user)
     async def rob(self, ctx, user: discord.User):
 
@@ -289,7 +327,8 @@ class econ_cog(commands.Cog):
                         await ctx.send("Your rob was unsuccessful. In fact, it went so badly that you were taken to court! You've lost {} Krauss Coin{}.".format(paidAmount,s))
 
 
-    @commands.command(name="bankRob", help="You try robbing a bank. Big risk but big payoff")
+
+    @commands.command(name="BankRob", help="You try robbing a bank. Big risk but big payoff")
     @commands.cooldown(1,36000,commands.BucketType.user)
     async def bankRob(self, ctx):
 
@@ -314,7 +353,8 @@ class econ_cog(commands.Cog):
             await ctx.send("Your attempt to rob the bank was successful and you've managed to take {} Krauss Coins".format(pay))
 
 
-    @commands.command(name="Shop", help="Shows you the items we currently have in store")
+
+    @commands.command(name="Shop", aliases = ["store"], help="Shows you the items we currently have in store")
     async def shop(self,ctx):
 
         embedMsg = discord.Embed(title = "Shop")
@@ -324,24 +364,38 @@ class econ_cog(commands.Cog):
             price = item[1]["price"]
             description = item[2]["description"]
 
-            embedMsg.add_field(name=name, value="{} Krauss Coins | {}".format(price,description))
+            embedMsg.add_field(name=name, value="Price: {} Krauss Coins \n Description:  {}".format(price,description))
 
         await ctx.send(embed = embedMsg)
 
 
-    @commands.command(name="Buy", help="Buys an item from the availables one in the shop")
+
+    @commands.command(name="Buy", aliases = ["purchase"], help="Buys an item from the availables one in the shop")
     async def buy(self, ctx, *, query=""):
 
-        buyable = canBuy(ctx, query.strip())
+        buyable,price = canBuy(ctx, query.strip())
 
         if buyable == True:
 
-            await ctx.send("Buyable!")
-            # Buy code goes here
+            authorBank = loadUserData(ctx.author.id)
+
+            try:
+                authorBank.items[query] = authorBank.items[query] + 1
+
+            except:
+                authorBank.items[query] = 1
+
+            authorBank.wallet = authorBank.wallet - price
+            saveUserData(ctx.author.id,authorBank)
+
+            await ctx.send("You transaction was successful.")
 
         else:
 
             await ctx.send("Either you misspelled the name or you don't have enough money in your wallet.")
 
+
+
+# Throw (throws item away) | GiveItem 
 
     
