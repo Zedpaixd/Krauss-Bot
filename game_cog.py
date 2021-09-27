@@ -186,7 +186,7 @@ class game_cog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="hangman", help="hangman letter/word - Guesses a letter / the word")
+    @commands.command(name="Hangman", help="hangman letter/word - Guesses a letter / the word")
     async def hangman(self, ctx, guess: str):
 
         playerID = ctx.author.id
@@ -207,7 +207,7 @@ class game_cog(commands.Cog):
         else:
             await ctx.send("Progress: {}\nGuesses: {}\nLives: {}".format(hangmanUniqueInstance.returnProgress(),hangmanUniqueInstance.returnGuesses(),hangmanUniqueInstance.returnLives()))
 
-    @commands.command(name="rps", help="rps rock/paper/scissors - you play a game of RPS against the AI")
+    @commands.command(name="Rps", help="rps rock/paper/scissors - you play a game of RPS against the AI")
     async def rps(self, ctx, *, choice = ""):
 
         choice = choice.strip().lower()
