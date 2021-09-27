@@ -12,6 +12,13 @@ store = [[{"name":"Bomb"},{"price":500},{"description":"Chance of explosion upon
          [{"name":"Donation to charity"},{"price":99999},{"description":"What the name says"}],
          [{"name":"Nothing"},{"price":2},{"description":"Genuinely nothing, what are you looking at"}]]
 
+itemList = []
+
+for item in store:
+
+        itemList.append(item[0]["name"].lower())
+
+
 
 def dataFileLoader():
 
@@ -216,7 +223,7 @@ class econ_cog(commands.Cog):
 
 
     @commands.command(name="Give", help="Donates a part of your money to the person in cause")
-    async def give(self, ctx, user: discord.User, amount = None):
+    async def give(self, ctx, user: discord.User, *, amount = None):
         
         user = user.id
 
@@ -395,7 +402,44 @@ class econ_cog(commands.Cog):
             await ctx.send("Either you misspelled the name or you don't have enough money in your wallet.")
 
 
+    @commands.command(name="GiveItem", help="Give one of your items to someone else")
+    async def giveItem(self, ctx, user: discord.User, *, item):
 
-# Throw (throws item away) | GiveItem 
+
+        try:
+
+            user = user.id
+            item = item.lower().strip()
+
+            authorBank = loadUserData(ctx.author.id)
+            mentionedBank = loadUserData(user)
+
+            if (item in itemList) and (authorBank.items[item] > 0):
+
+                try:
+
+                    mentionedBank.items[item] = mentionedBank.items[item] + 1
+
+                except:
+
+                    mentionedBank.items[item] = 1
+
+                authorBank.items[item] = authorBank.items[item] - 1
+
+                saveUserData(ctx.author.id,authorBank)
+                saveUserData(user,mentionedBank)
+
+                await ctx.send("Your donation has been received.")
+
+            else:
+
+                await ctx.send("You either don't have the item you're trying to give away or you misstyped it.")
+
+        except:   # due to user: discord.User it never reaches here, only if user is a correct user. In the contrary case, the command does not execute
+
+            await ctx.send("Syntax error. Please make sure you type it correctly.")
+
+
+# Throw (throws item away)
 
     
