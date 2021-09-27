@@ -440,6 +440,27 @@ class econ_cog(commands.Cog):
             await ctx.send("Syntax error. Please make sure you type it correctly.")
 
 
-# Throw (throws item away)
+    @commands.command(name="ThrowItem", help="Throws one of your items away")
+    async def ThrowItem(self, ctx, *, item):
+
+        item = item.lower().strip()
+
+        authorBank = loadUserData(ctx.author.id)
+
+        if (item in itemList) and (authorBank.items[item] > 0):
+
+            authorBank.items[item] = authorBank.items[item] - 1
+            saveUserData(ctx.author.id,authorBank)
+
+            await ctx.send("Successfully thrown away **{}**".format(item))
+
+
+    #@commands.command(name="getmoney",help="yes")
+    #async def getmoney(self, ctx, amount):
+
+        #authorBank = loadUserData(ctx.author.id)
+        #authorBank.wallet = authorBank.wallet + int(amount)
+        #saveUserData(ctx.author.id,authorBank)
+        #await ctx.send("Done.")
 
     
