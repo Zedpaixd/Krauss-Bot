@@ -455,12 +455,4 @@ class econ_cog(commands.Cog):
             await ctx.send("Successfully thrown away **{}**".format(item))
 
 
-    #@commands.command(name="getmoney",help="yes")
-    #async def getmoney(self, ctx, amount):
-
-        #authorBank = loadUserData(ctx.author.id)
-        #authorBank.wallet = authorBank.wallet + int(amount)
-        #saveUserData(ctx.author.id,authorBank)
-        #await ctx.send("Done.")
-
     
