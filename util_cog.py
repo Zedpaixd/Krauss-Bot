@@ -5,7 +5,7 @@ from discord.ext import commands
 import random
 import json 
 from prsaw import RandomStuff
-
+import asyncio
 
 with open("apiKey.txt","r") as file:
     key = file.read()
@@ -155,3 +155,27 @@ class util_cog(commands.Cog):
             except: 
 
                 await ctx.send("{}    - IF YOU FIND THIS FORMAT, SEND ME A PICTURE OF IT Planta#9305".format(joke))
+
+
+    @commands.command(name="RemindMe", help="Reminds you in x minutes of something you want to be reminded of")
+    async def remindme(self, ctx, minutes, *, message):
+
+        try:
+        
+            minutes = float(minutes)
+            minutes = minutes*60
+
+            if minutes/60 != 1:
+                s = "s"
+            else:
+                s = ""
+
+            await ctx.send("Sure! I'll remind you")
+
+            await asyncio.sleep(minutes)
+
+            await ctx.send("{} I've been told to remind you in {} miunte{} of: \"{}\"".format(ctx.author.mention, minutes/60, s, message))
+
+        except:
+
+            await ctx.send("Wrong syntax, please check the help section of this command")
