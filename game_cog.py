@@ -2,6 +2,117 @@ import random
 from discord.ext import commands
 import discord
 from nltk.corpus import words
+import asyncio
+import time
+
+
+
+
+
+
+class Blackjack:
+
+    def __init__(self):
+        
+        self.playerTotal = 0
+        self.dealerTotal = 0
+
+
+    def card_deck(self):
+
+        card_values = ['2','3','4','5','6','7','8','9','10','J','Q','K']
+        card_types = ['Hearts','Spades','Clubs','Diamonds']
+        deck = []
+
+        for i in card_type:
+
+            for j in card_value:
+
+                deck.append(j + ' of ' + i)
+
+        return deck
+
+
+    def card_value(self,card):
+
+        if card[:1] in ('2','3','4','5','6','7','8','9'):
+            return int(card[:1])
+
+        elif card[:1] in ('J','Q','K','1'):
+                    return int(10)
+
+
+    def newCard(self,deck):
+
+        return deck[randint(0,len(deck)-1)]
+
+
+    def removeCard(self,deck,card):
+
+        return deck.remove(card)
+
+
+    def getTotals(self):
+        
+        return self.playerTotal,self.dealerTotal
+
+
+bjGames = {}
+
+class BlackjackGame:
+
+    currentGame = None
+
+    def run(self, playerID, command):
+
+        self.getGameID(playerID)
+
+        # CODE GOES HERE
+
+
+        self.save(playerID)
+
+
+
+    def getGameID(self, playerID):
+
+        if playerID in games.keys():
+            self.currentGame = games[playerID]
+
+            if self.currentGame is None:
+                self.initializeGame(playerID)
+
+        else:
+            self.initializeGame(playerID)
+
+
+
+    def initializeGame(self, playerID):
+
+        gameWord = self.getWord()
+        self.currentGame = Hangman(gameWord)
+        self.save(playerID)
+
+
+
+    def save(self, playerID):
+
+        bjGames[playerID] = self.currentGame
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Hangman:
 
@@ -237,5 +348,23 @@ class game_cog(commands.Cog):
                 gameResult = "You lost."
 
             await ctx.send("You picked **{}** and the AI picked **{}**. {}".format(choice,AI,gameResult))
+
+
+    @commands.command(name="Bj", aliases=["blackjack"], help="Blackjack game. Use !Bj {start,hit,stand}")
+    async def bj(self, ctx, *, command):
+
+            
+        try:
+
+            uniqueInstance = BlackjackGame()
+            uniqueInstance.run(ctx.author.id, command)
+
+
+        except:
+                
+            await ctx.send("Syntax Error")
+            
+
+
 
 
