@@ -130,7 +130,7 @@ class econ_cog(commands.Cog):
 
 
 
-    @commands.command(name="Inventory", aliases=["bag","stash","backpack"], help="Shows your inventory")
+    @commands.command(name="Inventory", aliases=["bag","stash","backpack","items"], help="Shows your inventory")
     async def inventory(self, ctx, *, query = ""):
 
         if (query == ""):
