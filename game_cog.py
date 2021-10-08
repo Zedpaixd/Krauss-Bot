@@ -16,6 +16,7 @@ class Blackjack:
         
         self.playerTotal = 0
         self.dealerTotal = 0
+        self.initalizeGame = False
 
 
     def card_deck(self):
@@ -24,9 +25,9 @@ class Blackjack:
         card_types = ['Hearts','Spades','Clubs','Diamonds']
         deck = []
 
-        for i in card_type:
+        for i in card_types:
 
-            for j in card_value:
+            for j in card_values:
 
                 deck.append(j + ' of ' + i)
 
@@ -44,7 +45,7 @@ class Blackjack:
 
     def newCard(self,deck):
 
-        return deck[randint(0,len(deck)-1)]
+        return deck[random.randint(0,len(deck)-1)]
 
 
     def removeCard(self,deck,card):
@@ -57,6 +58,7 @@ class Blackjack:
         return self.playerTotal,self.dealerTotal
 
 
+
 bjGames = {}
 
 class BlackjackGame:
@@ -67,7 +69,40 @@ class BlackjackGame:
 
         self.getGameID(playerID)
 
-        # CODE GOES HERE
+        if (command.lower() == "start") and self.currentGame.initalizeGame == False:
+
+            new_deck = self.currentGame.card_deck()
+
+            card1 = self.currentGame.newCard(new_deck)
+            self.currentGame.removeCard(new_deck,card1)
+            card2 = self.currentGame.newCard(new_deck)
+            self.currentGame.removeCard(new_deck,card2)
+            self.currentGame.playerTotal = self.currentGame.card_value(card1) + self.currentGame.card_value(card2)
+
+            dealercard1 = self.currentGame.newCard(new_deck)
+            self.currentGame.removeCard(new_deck,dealercard1)
+            dealercard2 = self.currentGame.newCard(new_deck)
+            self.currentGame.removeCard(new_deck,dealercard2)
+            self.currentGame.dealerTotal = self.currentGame.card_value(dealercard1) + self.currentGame.card_value(dealercard2)
+
+            self.currentGame.initalizeGame = True
+
+            return self.currentGame.initalizeGame,self.currentGame.playerTotal,self.currentGame.dealerTotal
+
+        elif (command.lower() == "start") and self.currentGame.initalizeGame == True:
+
+            # ...
+            return self.currentGame.initalizeGame,self.currentGame.playerTotal,self.currentGame.dealerTotal
+
+        elif (command.lower() == "hit"):
+
+            # ...
+            return self.currentGame.initalizeGame,self.currentGame.playerTotal,self.currentGame.dealerTotal
+
+        elif (command.lower() == "hold"):
+
+            # ...
+            return self.currentGame.initalizeGame,self.currentGame.playerTotal,self.currentGame.dealerTotal
 
 
         self.save(playerID)
@@ -76,8 +111,8 @@ class BlackjackGame:
 
     def getGameID(self, playerID):
 
-        if playerID in games.keys():
-            self.currentGame = games[playerID]
+        if playerID in bjGames.keys():
+            self.currentGame = bjGames[playerID]
 
             if self.currentGame is None:
                 self.initializeGame(playerID)
@@ -89,8 +124,7 @@ class BlackjackGame:
 
     def initializeGame(self, playerID):
 
-        gameWord = self.getWord()
-        self.currentGame = Hangman(gameWord)
+        self.currentGame = Blackjack()
         self.save(playerID)
 
 
@@ -350,19 +384,48 @@ class game_cog(commands.Cog):
             await ctx.send("You picked **{}** and the AI picked **{}**. {}".format(choice,AI,gameResult))
 
 
-    @commands.command(name="Bj", aliases=["blackjack"], help="Blackjack game. Use !Bj {start,hit,stand}")
+    @commands.command(name="Bj", aliases=["blackjack"], help="Blackjack game. Use !Bj {start,hit,hold}")
     async def bj(self, ctx, *, command):
 
             
         try:
 
             uniqueInstance = BlackjackGame()
-            uniqueInstance.run(ctx.author.id, command)
+            gameState,playerHand,dealerHand = uniqueInstance.run(ctx.author.id, command)
+            
+
+            if gameState == True:
+
+                if playerHand == 21:
+
+                    await ctx.send("Blackjack!! You won!")
+
+                elif playerHand > 21:
+
+                    await ctx.send("Busted! You lost.")
+
+                elif command.lower() == "hold":
+                    
+                    await ctx.send("...")  # dealer draws until > playerhand or until > 21
+
+                elif (command.lower() == "hit") and playerHand < 21 and dealerHand < 21:
+
+                    await ctx.send("Your new total is: {}\n The dealer's current total is: {}\n What is your next move? (Hit/Stand)".format(playerHand,dealerHand))
+
+                elif (command.lower() == "start"):
+
+                    await ctx.send("Your total is: {}\n The dealer's total is: {}\n What is your next move? (Hit/Stand)".format(playerHand,dealerHand))
+
+            else:
+
+                await ctx.send("You may wanna start the game first.")
+
+                
 
 
         except:
                 
-            await ctx.send("Syntax Error")
+            await ctx.send("Syntax Error. Check if you have a game running already or if you misstyped the command.")
             
 
 
