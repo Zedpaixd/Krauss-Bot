@@ -1,4 +1,5 @@
 #pip install prsaw
+#pip install -U deep_translator
 
 import discord
 from discord.ext import commands
@@ -6,6 +7,7 @@ import random
 import json 
 from prsaw import RandomStuff
 import asyncio
+from deep_translator import GoogleTranslator
 
 with open("apiKey.txt","r") as file:
     key = file.read()
@@ -179,3 +181,17 @@ class util_cog(commands.Cog):
         except:
 
             await ctx.send("Wrong syntax, please check the help section of this command")
+
+
+    @commands.command(name="Translate", help="Transates to your desired language.")
+    async def translate(self, ctx, language, *, message):
+        
+        try:
+
+            translatedMessage = GoogleTranslator(source='auto', target=language).translate(message)
+
+            await ctx.send("I've been asked to translate: {}\nHere you go, this is the translation: {}".format(message,translatedMessage))
+
+        except:
+
+            await ctx.send("Either you are translating into the same language or there is a syntax error involved.")
