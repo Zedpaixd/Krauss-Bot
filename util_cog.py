@@ -194,4 +194,4 @@ class util_cog(commands.Cog):
 
         except:
 
-            await ctx.send("Either you are translating into the same language or there is a syntax error involved.")
+            await ctx.send("Either you are translating into some unheard language or there is a syntax error involved.")
