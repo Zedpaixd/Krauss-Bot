@@ -76,6 +76,8 @@ class music_cog(commands.Cog):
 
         else:
             self.is_playing = False
+            await ctx.voice_client.disconnect()
+            await ctx.send("Disconnected!")
 
 
     @commands.command(name="Play", help="play {link/name} - Plays a selected song from youtube")
@@ -127,7 +129,6 @@ class music_cog(commands.Cog):
             # playing next song, if there is any
             try:
                 await self.play_music(ctx)
-                await ctx.send("We all know, don't worry.")
 
             except:
                 pass
