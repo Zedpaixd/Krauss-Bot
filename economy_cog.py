@@ -4,9 +4,10 @@ from discord.ext.commands import Bot
 import random
 import pickle
 import os
+import collections
 
 
-# Yoink
+# Yoink , Lottery (look up 6/49)
 
 store = [[{"name":"Bomb"},{"price":500},{"description":"Chance of explosion upon you being robbed, saving your money"}],
          [{"name":"Donation to charity"},{"price":99999},{"description":"What the name says"}],
@@ -245,6 +246,8 @@ class econ_cog(commands.Cog):
                     mentionedBank.wallet = mentionedBank.wallet + amount
                     saveUserData(ctx.author.id,authorBank)
                     saveUserData(user,mentionedBank)
+
+                    await ctx.send("Money has been successfully sent!")
         
             except:
                 await ctx.send("Did you misstype the amount? Please only use integers")
@@ -332,6 +335,39 @@ class econ_cog(commands.Cog):
                         saveUserData(user,mentionedBank)
 
                         await ctx.send("Your rob was unsuccessful. In fact, it went so badly that you were taken to court! You've lost {} Krauss Coin{}.".format(paidAmount,s))
+
+
+    @commands.command(name="Lotto", help="Want to try your luck at 6/49?")
+    @commands.cooldown(1,36000,commands.BucketType.user)
+    async def lotto(self, ctx, *, numbers):
+
+        numberArray = numbers.split(" ")
+        luckyNumbers = []
+
+        for i in range(6):
+
+            randomNumber = random.randint(1,49)
+
+            if randomNumber < 10:
+
+                luckyNumbers.append("0{}".format(randomNumber))
+
+            else:
+
+                luckyNumbers.append(str(randomNumber))
+
+        if collections.Counter(numberArray) == collections.Counter(luckyNumbers):
+            
+            userData = loadUserData(ctx.author.id)
+            userData.wallet = userData.wallet + 1000000
+            saveUserData(ctx.author.id,userData)
+
+            await ctx.send("Congratulations, you guessed correctly! Feel free to look at your money now.")
+
+        else:
+
+            await ctx.send("Unfortunately, the lucky numbers were: {}".format(" ".join(luckyNumbers)))
+
 
 
 
