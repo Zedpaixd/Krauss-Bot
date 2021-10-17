@@ -14,7 +14,7 @@ First things first, you will need python to be installed and then install the fo
 - pip install ffmpeg       - To allow the bot to actually play the songs in a voice chat
 - pip install nltk         - Used to provide a list of words for the hangman game
 - pip install prsaw        - Api used to provide human-like bot replies to everyday chat (!!chatbot)
-- pip install -U deep_translator - Machine learning translator API. Used for the !!translate command
+- pip install -U deep_translator - Machine learning translator. Used for the !!translate command
 
 Once you are done with installing the libraries, you will need to create 2 files:
 - "botToken.txt" - a simple bot token file. Create it, paste the token in there and save
