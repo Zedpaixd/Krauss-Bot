@@ -176,7 +176,7 @@ class util_cog(commands.Cog):
 
             await asyncio.sleep(minutes)
 
-            await ctx.send("{} I've been told to remind you in {} miunte{} of: \"{}\"".format(ctx.author.mention, minutes/60, s, message))
+            await ctx.author.send("{} I've been told to remind you in {} miunte{} of: \"{}\"".format(ctx.author.mention, minutes/60, s, message))
 
         except:
 
