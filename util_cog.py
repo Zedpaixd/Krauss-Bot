@@ -17,7 +17,7 @@ chatbot = RandomStuff(api_key=key)
 
 class util_cog(commands.Cog):
 
-    @commands.command(name="random", help="random a b - Provides a random number between a and b")
+    @commands.command(name="Random", help="Random a b - Provides a random number between a and b")
     async def random(self, ctx, *, query = ""):
 
         try:
@@ -33,7 +33,7 @@ class util_cog(commands.Cog):
 
 
 
-    @commands.command(name="bully", help="bully @Person - You virtually bully a person in a unique way")
+    @commands.command(name="Bully", help="Bully @Person - You virtually bully a person in a unique way")         # TO FIX
     async def bully(self, ctx, *, query = ""):
         
         try:
@@ -56,14 +56,14 @@ class util_cog(commands.Cog):
             await ctx.send("Some error happened, make sure the syntax is correct.")
 
 
-    @commands.command(name="kill", help="kill @Person - You virtually kill a person")
+    @commands.command(name="Kill", help="Kill @Person - You virtually kill a person")
     async def kill(self, ctx, *, query = ""):
 
         author = '{0.author.mention}'.format(ctx.message)
         await ctx.send("Killing is bad, {}".format(author))
 
 
-    @commands.command(name="mock", help="mock text - mOcKs ThE tExT")
+    @commands.command(name="Mock", help="mOcKs ThE tExT")
     async def mock(self, ctx, *, query = ""):
 
         finalString = ""
@@ -91,7 +91,7 @@ class util_cog(commands.Cog):
         await ctx.send(finalString)
 
 
-    @commands.command(name="chatbot", help="Want to talk to Zul Krauss? Now you can!")
+    @commands.command(name="Chatbot", help="Want to talk to Zul Krauss? Now you can!")
     async def chatbot(self, ctx, *, message):
         
         message = str(message)
@@ -99,7 +99,7 @@ class util_cog(commands.Cog):
         await ctx.send(chatbot.get_ai_response(message)[0]["message"])
 
 
-    @commands.command(name="pun", help="Want some puns?")
+    @commands.command(name="Pun", help="Want some puns?")
     async def pun(self, ctx):
 
         joke = chatbot.get_joke("pun")
@@ -119,7 +119,7 @@ class util_cog(commands.Cog):
                 await ctx.send("{}    - IF YOU FIND THIS FORMAT, SEND ME A PICTURE OF IT Planta#9305".format(joke))
 
 
-    @commands.command(name="pjoke", help="Programming jokes")
+    @commands.command(name="PJoke", help="Programming jokes!")
     async def pjoke(self, ctx):
 
         joke = chatbot.get_joke("dev")
@@ -139,7 +139,7 @@ class util_cog(commands.Cog):
                 await ctx.send("{}    - IF YOU FIND THIS FORMAT, SEND ME A PICTURE OF IT Planta#9305".format(joke))
 
 
-    @commands.command(name="spooky", help="\"Spooky\" stuff")
+    @commands.command(name="Spooky", help="\"Spooky\" stuff")
     async def spooky(self, ctx):
 
         joke = chatbot.get_joke("spooky")
