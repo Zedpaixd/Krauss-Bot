@@ -195,3 +195,8 @@ class util_cog(commands.Cog):
         except:
 
             await ctx.send("Either you are translating into some unheard language or there is a syntax error involved.")
+
+    @commands.command("InThisHouseWe", help="We did... what?")            #REQUESTED
+    async def InThisHouse(self, ctx, *, message):
+
+        await ctx.send("┏┓\n┃┃╱╲ in\n┃╱╱╲╲ this\n╱╱╭╮╲╲house\n▔▏┗┛▕▔ we\n╱▔▔▔▔▔▔▔▔▔▔╲\n{}\n╱╱┏┳┓╭╮┏┳┓ ╲╲\n▔▏┗┻┛┃┃┗┻┛▕▔".format(" "*(int(10-min((len(message)/8),20))) + message))
