@@ -208,3 +208,9 @@ class util_cog(commands.Cog):
 
         await ctx.send(message)
         await ctx.message.delete()
+
+
+    @commands.command("Say", help="Make Krauss Bot say something")
+    async def Say(self, ctx, *, message):
+
+        await ctx.send(message)
