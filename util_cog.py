@@ -196,7 +196,15 @@ class util_cog(commands.Cog):
 
             await ctx.send("Either you are translating into some unheard language or there is a syntax error involved.")
 
+
     @commands.command("InThisHouseWe", help="We did... what?")            #REQUESTED
     async def InThisHouse(self, ctx, *, message):
 
         await ctx.send("┏┓\n┃┃╱╲ in\n┃╱╱╲╲ this\n╱╱╭╮╲╲house\n▔▏┗┛▕▔ we\n╱▔▔▔▔▔▔▔▔▔▔╲\n{}\n╱╱┏┳┓╭╮┏┳┓ ╲╲\n▔▏┗┻┛┃┃┗┻┛▕▔".format(" "*(int(10-min((len(message)/8),20))) + message))
+
+
+    @commands.command("SayD", help="Make Krauss Bot say something and delete your message after")
+    async def SayD(self, ctx, *, message):
+
+        await ctx.send(message)
+        await ctx.message.delete()
