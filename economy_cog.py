@@ -7,7 +7,7 @@ import os
 import collections
 
 
-# Yoink , Lottery (look up 6/49)
+# Yoink
 
 store = [[{"name":"Bomb"},{"price":500},{"description":"Chance of explosion upon you being robbed, saving your money"}],
          [{"name":"Donation to charity"},{"price":99999},{"description":"What the name says"}],
