@@ -90,7 +90,7 @@ async def setPrefix(ctx,prefix):
 
 
 
-@bot.command()
+@bot.command(name = "Ping", help="Pong!")
 async def ping(ctx):
 
     await ctx.send('Pong! {} ({} milliseconds)'.format('{0.author.mention}'.format(ctx.message), int(round(bot.latency, 3)*1000)))
