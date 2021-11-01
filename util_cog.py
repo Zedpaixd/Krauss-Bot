@@ -5,6 +5,8 @@ import discord
 from discord.ext import commands
 import random
 import json 
+import os
+from pathlib import Path
 from prsaw import RandomStuff
 import asyncio
 from deep_translator import GoogleTranslator
@@ -35,13 +37,14 @@ class util_cog(commands.Cog):
 
     @commands.command(name="Bully", help="Bully @Person - You virtually bully a person in a unique way")         # TO FIX
     async def bully(self, ctx, *, query = ""):
-        
+
         try:
             if (query != ""):
-                query = query.strip()
-            
-                with open("bully messages.txt","r") as file:
+                query = query.strip() 
+                
+                with open(str(Path().absolute())+r"\Message Templates\bully messages.txt","r") as file:
                     content = file.read()
+                   
 
                 content = content.split("\n")
                 botMessage = random.choice(content)
