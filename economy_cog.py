@@ -261,80 +261,89 @@ class econ_cog(commands.Cog):
         user = user.id
         authorBank = loadUserData(ctx.author.id)
         mentionedBank = loadUserData(user)
+        
+        if 'bomb' in mentionedBank.items:
+            pass
 
-        if (mentionedBank.bomb == 1):
+        else:
+            mentionedBank.items['bomb'] = 0
+
+
+        if (mentionedBank.items['bomb'] >= 1):
 
             chance = random.randint(1,100)
 
             if (chance <= 50):
-
+                
                 await ctx.send("The person who you are trying to rob's bomb has exploded making a loud noise. To not be caught you ran away")
-                mentionedBank.bomb = 0
+                mentionedBank.items['bomb'] = mentionedBank.items['bomb'] - 1
+                saveUserData(user,mentionedBank)
+
+                return
+
+               
+        if mentionedBank.wallet < 1:
+
+            await ctx.send("The person doesn't have any money, what are you trying to rob?")
+
+        else:
+
+            outcome = random.randint(1,100)
+
+            if (outcome<15):
+            
+                robbedAmount = random.randint(mentionedBank.wallet//2,mentionedBank.wallet)
+
+                if robbedAmount != 1:
+                    s = "s"
+
+                else:
+                    s = ""
+
+                authorBank.wallet = authorBank.wallet + robbedAmount 
+                mentionedBank.wallet = mentionedBank.wallet - robbedAmount
+                saveUserData(ctx.author.id,authorBank)
+                saveUserData(user,mentionedBank)
+
+                await ctx.send("You've stolen a LOT of their belongings. Now if it categorizes as a lot, that is up to you. You've received {} Krauss Coin{}.".format(robbedAmount,s))
+        
+            elif (outcome < 50):
+
+                robbedAmount = random.randint(0,mentionedBank.wallet//5)
+
+                if robbedAmount != 1:
+                    s = "s"
+
+                else:
+                    s = ""
+
+                authorBank.wallet = authorBank.wallet + robbedAmount 
+                mentionedBank.wallet = mentionedBank.wallet - robbedAmount
+                saveUserData(ctx.author.id,authorBank)
+                saveUserData(user,mentionedBank)
+
+                await ctx.send("The rob was successful. You've stolen {} Krauss Coin{}.".format(robbedAmount,s))
+
+            elif (outcome < 75):
+
+                await ctx.send("You did not get the chance to steal Krauss Coins from your target, they were on guard.")
 
             else:
 
-                if mentionedBank.wallet < 1:
+                paidAmount = random.randint(0,authorBank.wallet)
 
-                    await ctx.send("The person doesn't have any money, what are you trying to rob?")
+                if paidAmount != 1:
+                    s = "s"
 
                 else:
+                    s = ""
 
-                    outcome = random.randint(1,100)
+                authorBank.wallet = authorBank.wallet - paidAmount 
+                mentionedBank.wallet = mentionedBank.wallet + paidAmount
+                saveUserData(ctx.author.id,authorBank)
+                saveUserData(user,mentionedBank)
 
-                    if (outcome<15):
-            
-                        robbedAmount = random.randint(mentionedBank.wallet//2,mentionedBank.wallet)
-
-                        if robbedAmount != 1:
-                            s = "s"
-
-                        else:
-                            s = ""
-
-                        authorBank.wallet = authorBank.wallet + robbedAmount 
-                        mentionedBank.wallet = mentionedBank.wallet - robbedAmount
-                        saveUserData(ctx.author.id,authorBank)
-                        saveUserData(user,mentionedBank)
-
-                        await ctx.send("You've stolen a LOT of their belongings. Now if it categorizes as a lot, that is up to you. You've received {} Krauss Coin{}.".format(robbedAmount,s))
-        
-                    elif (outcome < 50):
-
-                        robbedAmount = random.randint(0,mentionedBank.wallet//5)
-
-                        if robbedAmount != 1:
-                            s = "s"
-
-                        else:
-                            s = ""
-
-                        authorBank.wallet = authorBank.wallet + robbedAmount 
-                        mentionedBank.wallet = mentionedBank.wallet - robbedAmount
-                        saveUserData(ctx.author.id,authorBank)
-                        saveUserData(user,mentionedBank)
-
-                        await ctx.send("The rob was successful. You've stolen {} Krauss Coin{}.".format(robbedAmount,s))
-
-                    elif (outcome < 75):
-
-                        await ctx.send("You did not get the chance to steal Krauss Coins from your target, they were on guard.")
-
-                    else:
-
-                        paidAmount = random.randint(0,authorBank.wallet)
-
-                        if paidAmount != 1:
-                            s = "s"
-
-                        else:
-                            s = ""
-
-                        authorBank.wallet = authorBank.wallet - paidAmount 
-                        mentionedBank.wallet = mentionedBank.wallet + paidAmount
-                        saveUserData(ctx.author.id,authorBank)
-                        saveUserData(user,mentionedBank)
-
-                        await ctx.send("Your rob was unsuccessful. In fact, it went so badly that you were taken to court! You've lost {} Krauss Coin{}.".format(paidAmount,s))
+                await ctx.send("Your rob was unsuccessful. In fact, it went so badly that you were taken to court! You've lost {} Krauss Coin{}.".format(paidAmount,s))
 
 
     @commands.command(name="Lotto", help="Want to try your luck at 6/49?")
@@ -423,15 +432,22 @@ class econ_cog(commands.Cog):
             authorBank = loadUserData(ctx.author.id)
 
             try:
-                authorBank.items[query] = authorBank.items[query] + 1
+                if query == 'bomb' and authorBank.items['bomb'] > 0:
+
+                    await ctx.send("You can not buy more bombs.")
+
+                else:
+
+                    authorBank.items[query] = authorBank.items[query] + 1
+                    authorBank.wallet = authorBank.wallet - price
+                    await ctx.send("You transaction was successful.")
 
             except:
                 authorBank.items[query] = 1
+                authorBank.wallet = authorBank.wallet - price
+                await ctx.send("You transaction was successful.")
 
-            authorBank.wallet = authorBank.wallet - price
             saveUserData(ctx.author.id,authorBank)
-
-            await ctx.send("You transaction was successful.")
 
         else:
 
@@ -489,6 +505,3 @@ class econ_cog(commands.Cog):
             saveUserData(ctx.author.id,authorBank)
 
             await ctx.send("Successfully thrown away **{}**".format(item))
-
-
-    
