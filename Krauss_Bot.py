@@ -71,6 +71,8 @@ async def on_guild_join(guild):
 
         json.dump(prefixes,file)
 
+    print("Joined {}.".format(guild.name))
+
 
 
 @bot.command(name = "setPrefix", help="setPrefix x - Sets the bot prefix to x")
