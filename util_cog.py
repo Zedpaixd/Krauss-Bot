@@ -10,9 +10,12 @@ from pathlib import Path
 from prsaw import RandomStuff
 import asyncio
 from deep_translator import GoogleTranslator
+import requests
 
 with open("apiKey.txt","r") as file:
-    key = file.read()
+    key = file.readline().strip()
+    key2 = file.readline().strip()
+
 
 chatbot = RandomStuff(api_key=key)
 
@@ -99,67 +102,59 @@ class util_cog(commands.Cog):
         
         message = str(message)
 
-        await ctx.send(chatbot.get_ai_response(message)[0]["message"])
+        url = "https://random-stuff-api.p.rapidapi.com/ai"
+
+        querystring = {"msg":message,"bot_name":"Zul Krauss","bot_gender":"rat","bot_master":"Zedpaixd","bot_age":"1","bot_location":"Cyber World","bot_birth_year":"2021","bot_birth_date":"21st August 2021","bot_birth_place":"Cyber World","bot_favorite_color":"Purple","bot_favorite_book":"The Tempest","bot_favorite_band":"iPrevail","bot_favorite_artist":"Kaiyko & HYNN","id":random.randint(0,500000)}
+
+        headers = {
+                'authorization': key,
+                'x-rapidapi-host': "random-stuff-api.p.rapidapi.com",
+                'x-rapidapi-key': key2
+                }
+
+        response = requests.request("GET", url, headers=headers, params=querystring)
+
+        kraussReply = json.loads(response.text)
+
+        await ctx.send(kraussReply["AIResponse"])
 
 
-    @commands.command(name="Pun", help="Want some puns?")
-    async def pun(self, ctx):
+    @commands.command(name="Joke", help="Want some jokes? Types: dark/pun/spooky/christmas/programming/misc")
+    async def pun(self, ctx, jType = ""):
 
-        joke = chatbot.get_joke("pun")
+        if jType in ["dark","pun","spooky","christmas","programming","misc"]:
 
-        try:
+            url = "https://random-stuff-api.p.rapidapi.com/joke"
 
-            await ctx.send("{}\n{}".format(joke["setup"],joke["delivery"]))
-        
-        except:
+            querystring = {"type":jType}
 
-            try:
+            headers = {
+                'authorization': key,
+                'x-rapidapi-host': "random-stuff-api.p.rapidapi.com",
+                'x-rapidapi-key': key2
+                }
 
-                await ctx.send("{}".format(joke["joke"]))
+            req = requests.request("GET", url, headers=headers, params=querystring)
 
-            except: 
-
-                await ctx.send("{}    - IF YOU FIND THIS FORMAT, SEND ME A PICTURE OF IT Planta#9305".format(joke))
-
-
-    @commands.command(name="PJoke", help="Programming jokes!")
-    async def pjoke(self, ctx):
-
-        joke = chatbot.get_joke("dev")
-
-        try:
-
-            await ctx.send("{}\n{}".format(joke["setup"],joke["delivery"]))
-        
-        except:
-
-            try:
-
-                await ctx.send("{}".format(joke["joke"]))
-
-            except: 
-
-                await ctx.send("{}    - IF YOU FIND THIS FORMAT, SEND ME A PICTURE OF IT Planta#9305".format(joke))
-
-
-    @commands.command(name="Spooky", help="\"Spooky\" stuff")
-    async def spooky(self, ctx):
-
-        joke = chatbot.get_joke("spooky")
-
-        try:
-
-            await ctx.send("{}\n{}".format(joke["setup"],joke["delivery"]))
-        
-        except:
+            joke = json.loads(req.text)
 
             try:
 
-                await ctx.send("{}".format(joke["joke"]))
+                await ctx.send("{}\n{}".format(joke["setup"],joke["delivery"]))
+            
+            except:
 
-            except: 
+                try:
 
-                await ctx.send("{}    - IF YOU FIND THIS FORMAT, SEND ME A PICTURE OF IT Planta#9305".format(joke))
+                    await ctx.send("{}".format(joke["joke"]))
+
+                except: 
+
+                    await ctx.send("{}    - IF YOU FIND THIS FORMAT, SEND ME A PICTURE OF IT Planta#9305".format(joke))
+
+        else:
+
+            await ctx.send ("Invalid type! Do \"<prefix>help joke\" to see all possible types.")
 
 
     @commands.command(name="RemindMe", help="Reminds you in x minutes of something you want to be reminded of")
