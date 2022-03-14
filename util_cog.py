@@ -119,10 +119,10 @@ class util_cog(commands.Cog):
         await ctx.send(kraussReply["AIResponse"])
 
 
-    @commands.command(name="Joke", help="Want some jokes? Types: dark/pun/spooky/christmas/programming/misc")
-    async def pun(self, ctx, jType = ""):
+    @commands.command(name="Joke", help="Want some jokes? What tag do you want? (CaSe sEnSiTiVe) attitude, life, men, women, sport, beauty, sarcastic, marriage, people, car, animal, dirty, love, IT, stupid, motivational, money, intelligence, insults, rude, ugly, time, work, communication, hate, Father's Day, christian, God, family, political, doctor, food, kids, Christmas, flirty, mistake, fighting, age, retirement, success, friendship, happiness, motorcycle, alcohol, school, health, sex, Halloween, puns, birthday, death, blonde, travel, Valentines, racist, black, gay, drug, fat, best man speech, wedding, New Year, Thanksgiving, graduation, autumn, Easter, Mother's Day, April Fools Day, spring, summer, winter, St. Patrick's Day")
+    async def pun(self, ctx, *, jType = ""):
 
-        if jType in ["dark","pun","spooky","christmas","programming","misc"]:
+        if jType in ['attitude', 'life', 'men', 'women', 'sport', 'beauty', 'sarcastic', 'marriage', 'people', 'car', 'animal', 'dirty', 'love', 'IT', 'stupid', 'motivational', 'money', 'intelligence', 'insults', 'rude', 'ugly', 'time', 'work', 'communication', 'hate', "Father's Day", 'christian', 'God', 'family', 'political', 'doctor', 'food', 'kids', 'Christmas', 'flirty', 'mistake', 'fighting', 'age', 'retirement', 'success', 'friendship', 'happiness', 'motorcycle', 'alcohol', 'school', 'health', 'sex', 'Halloween', 'puns', 'birthday', 'death', 'blonde', 'travel', 'Valentines', 'racist', 'black', 'gay', 'drug', 'fat', 'best man speech', 'wedding', 'New Year', 'Thanksgiving', 'graduation', 'autumn', 'Easter', "Mother's Day", 'April Fools Day', 'spring', 'summer', 'winter', "St. Patrick's Day"]:
 
             url = "https://random-stuff-api.p.rapidapi.com/joke"
 
