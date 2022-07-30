@@ -19,7 +19,7 @@ First things first, you will need python to be installed and then install the fo
 Once you are done with installing the libraries, you will need to create 2 files:
 - "botToken.txt" - a simple bot token file. Create it, paste the token in there and save
 - "prefixes.json" - a json file where prefixes of servers will be added. If any issues arise with the file, instead of leaving it empty add " {} " inside it, without the quotation marks nor spaces.
-- "apiKey.txt" - a txt file containing the api token for the prsaw api. You can get yours here by simply [signing in here](https://api-info.pgamerx.com/register.html)
+- "apiKey.txt" - a txt file containing 2 tokens: #1 is the api key from [their register page](api.pgamerx.com/register) and #2 is the [X-Rapid-API-key from here](https://rapidapi.com/pgamerxdev/api/random-stuff-api); separate them by a new line.
 
 # Bot Features
 Will start writing here once more features have been added
