@@ -8,7 +8,7 @@ Given how the bot is open source, you're more than welcome to download the files
 # To Install
 First things first, you will need python to be installed and then install the following libraries via the following commands:
 - py get-pip.py (Windows) | $ python get-pip.py (Linux / MacOS)   - Installing pip in order to download custom made libraries
-- pip install discord      - Discord's api
+- pip install discord.py      - Discord's api
 - pip install PyNaCl       - To improve usability, security and speed.
 - pip install youtube_dl   - To download songs from YouTube in order to be played via the music bot features of the bot
 - pip install ffmpeg       - To allow the bot to actually play the songs in a voice chat
